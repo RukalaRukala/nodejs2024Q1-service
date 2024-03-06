@@ -35,11 +35,9 @@ export const db: IDataBase = {
       duration: 1,
     },
   ],
-  favorites: [
-    {
-      artists: ['Sting', 'Pink', 'Madonna'],
-      tracks: ['Hello', 'Mellow', 'Yellow'],
-      albums: ['My life', 'His life', 'Her life'],
-    },
-  ],
+  favorites: {
+    artists: ['Sting', 'Pink', 'Madonna'],
+    tracks: ['Hello', 'Mellow', 'Yellow'],
+    albums: ['My life', 'His life', 'Her life'],
+  },
 };
