@@ -17,7 +17,7 @@ export class FavoritesService {
   }
 
   findAll() {
-    return `This action returns all favorites`;
+    return this.favorites;
   }
 
   findOne(id: number) {

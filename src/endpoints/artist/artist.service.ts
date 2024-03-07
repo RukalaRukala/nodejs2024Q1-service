@@ -5,7 +5,7 @@ import { IArtist } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
 
 @Injectable()
-export class ArtistsService {
+export class ArtistService {
   private readonly artists: IArtist[];
 
   constructor() {

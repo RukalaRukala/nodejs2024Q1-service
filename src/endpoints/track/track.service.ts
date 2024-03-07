@@ -5,7 +5,7 @@ import { ITrack } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
 
 @Injectable()
-export class TracksService {
+export class TrackService {
   private readonly tracks: ITrack[];
 
   constructor() {

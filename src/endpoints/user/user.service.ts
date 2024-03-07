@@ -5,7 +5,7 @@ import { IUser } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   private readonly users: IUser[];
 
   constructor() {
@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.users.find(user => user.id === `${id}`);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

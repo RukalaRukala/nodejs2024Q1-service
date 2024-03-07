@@ -29,9 +29,9 @@ export interface IAlbum {
 }
 
 export interface IFavorites {
-  artists: string[]; // favorite artists ids
-  albums: string[]; // favorite albums ids
-  tracks: string[]; // favorite tracks ids
+  artists: string[]; // favorite artist ids
+  albums: string[]; // favorite album ids
+  tracks: string[]; // favorite track ids
 }
 
 export interface IDataBase {
