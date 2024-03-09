@@ -1,33 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { IUser } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
+import { UserDto } from './dto/user.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UserService {
-  private readonly users: IUser[];
+  private users: UserDto[];
 
   constructor() {
     this.users = db.users;
   }
+
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const currentTime = new Date().getTime();
+    const newUser = {
+      id: uuidv4(),
+      login: createUserDto.login,
+      password: createUserDto.password,
+      version: 1,
+      createdAt: currentTime,
+      updatedAt: currentTime,
+    } as UserDto;
+
+    this.users.push(newUser);
+    return newUser;
   }
 
   findAll() {
     return this.users;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.users.find(user => user.id === `${id}`);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  updatePassword(id: string, updateUserDto: UpdatePasswordDto) {
+    const chosenUser = this.users.find(user => user.id === id);
+    if (chosenUser.password === updateUserDto.oldPassword) {
+      this.users = this.users.filter(user => user.id !== id);
+      this.users.push({ ...chosenUser, password: updateUserDto.newPassword });
+      return updateUserDto;
+    }
+    throw new ForbiddenException('Old password is wrong');
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    this.users = this.users.filter(user => user.id !== id);
+    throw new HttpException('No content', HttpStatus.NO_CONTENT);
   }
 }

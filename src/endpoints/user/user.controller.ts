@@ -3,19 +3,23 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  UsePipes,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserIdValidationPipe } from './pipes/user-id-validation.pipe';
+import { DtoValidationPipe } from './pipes/dto-validation.pipe';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UsePipes(DtoValidationPipe)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -26,17 +30,23 @@ export class UserController {
   }
 
   @Get(':id')
+  @UsePipes(UserIdValidationPipe)
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Put(':id')
+  @UsePipes()
+  update(
+    @Param('id', UserIdValidationPipe) id: string,
+    @Body(DtoValidationPipe) updatePasswordDto: UpdatePasswordDto
+  ) {
+    return this.userService.updatePassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
+  @UsePipes(UserIdValidationPipe)
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
