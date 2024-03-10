@@ -44,7 +44,7 @@ export class ArtistService {
       return track;
     });
 
-    db.album = db.album.map(album => {
+    db.albums = db.albums.map(album => {
       if (album.artistId === id) {
         album.artistId = null;
       }

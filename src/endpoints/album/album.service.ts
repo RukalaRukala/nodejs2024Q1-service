@@ -1,33 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
-import { IAlbum } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
+import { v4 as uuidv4 } from 'uuid';
+import { AlbumDto } from './dto/album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @Injectable()
 export class AlbumService {
-  private readonly albums: IAlbum[];
+  create(createAlbum: CreateAlbumDto) {
+    const newAlbum = {
+      id: uuidv4(),
+      name: createAlbum.name,
+      year: createAlbum.year,
+      artistId: createAlbum.artistId || null,
+    } as AlbumDto;
 
-  constructor() {
-    this.albums = db.album;
-  }
-  create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
+    db.albums.push(newAlbum);
+    return newAlbum;
   }
 
   findAll() {
-    return this.albums;
+    return db.albums;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  findOne(id: string) {
+    return db.albums.find(album => album.id === id);
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const chosenAlbum = db.albums.find(album => album.id === id);
+    return {
+      id: chosenAlbum.id,
+      name: updateAlbumDto.name,
+      year: updateAlbumDto.year,
+      artistId: updateAlbumDto.artistId || chosenAlbum.artistId,
+    } as UpdateAlbumDto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  remove(id: string) {
+    db.albums = db.albums.filter(album => album.id !== id);
+
+    db.tracks = db.tracks.map(track => {
+      if (track.albumId === id) {
+        track.albumId = null;
+      }
+      return track;
+    });
   }
 }

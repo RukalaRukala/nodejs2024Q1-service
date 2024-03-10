@@ -38,7 +38,7 @@ export interface IDataBase {
   users: IUser[];
   artists: IArtist[];
   tracks: ITrack[];
-  album: IAlbum[];
+  albums: IAlbum[];
   favorites: IFavorites;
 }
 
