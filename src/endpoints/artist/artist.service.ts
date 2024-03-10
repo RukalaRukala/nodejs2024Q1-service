@@ -37,6 +37,10 @@ export class ArtistService {
 
   remove(id: string) {
     db.artists = db.artists.filter(artist => artist.id !== id);
+    db.favorites.artists = db.favorites.artists.filter(
+      artist => artist.id !== id
+    );
+
     db.tracks = db.tracks.map(track => {
       if (track.artistId === id) {
         track.artistId = null;

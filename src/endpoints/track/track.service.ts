@@ -41,5 +41,6 @@ export class TrackService {
 
   remove(id: string) {
     db.tracks = db.tracks.filter(track => track.id !== id);
+    db.favorites.tracks = db.favorites.tracks.filter(track => track.id !== id);
   }
 }

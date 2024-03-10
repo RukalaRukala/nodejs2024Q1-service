@@ -39,6 +39,7 @@ export class AlbumService {
 
   remove(id: string) {
     db.albums = db.albums.filter(album => album.id !== id);
+    db.favorites.albums = db.favorites.albums.filter(album => album.id !== id);
 
     db.tracks = db.tracks.map(track => {
       if (track.albumId === id) {
