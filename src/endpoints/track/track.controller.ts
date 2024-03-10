@@ -5,17 +5,16 @@ import {
   Body,
   Param,
   Delete,
-  BadRequestException,
   NotFoundException,
   HttpException,
   HttpStatus,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { ValidateService } from '../../validate/validate.service';
-import { isUUID } from 'class-validator';
 import { db } from '../../dataBase/db';
 
 @Controller('track')
@@ -27,10 +26,6 @@ export class TrackController {
 
   @Post()
   create(@Body() createTrackDto: CreateTrackDto) {
-    const props = ['name', 'duration'];
-    if (!this.validateService.isRequiredFields(createTrackDto, props)) {
-      throw new BadRequestException('Wrong required fields (name, duration)');
-    }
     return this.trackService.create(createTrackDto);
   }
 
@@ -40,10 +35,7 @@ export class TrackController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    if (!isUUID(id)) {
-      throw new BadRequestException('ID is not a valid UUID');
-    }
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     if (!this.validateService.doesIdExists(id, db.tracks)) {
       throw new NotFoundException("Track with this id doesn't exist");
     }
@@ -51,14 +43,10 @@ export class TrackController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    const props = ['name', 'duration'];
-    if (!this.validateService.isRequiredFields(updateTrackDto, props)) {
-      throw new BadRequestException('Wrong required fields (name, duration)');
-    }
-    if (!isUUID(id)) {
-      throw new BadRequestException('ID is not a valid UUID');
-    }
+  update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateTrackDto: UpdateTrackDto
+  ) {
     if (!this.validateService.doesIdExists(id, db.tracks)) {
       throw new NotFoundException("Track with this id doesn't exist");
     }
@@ -66,10 +54,7 @@ export class TrackController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    if (!isUUID(id)) {
-      throw new BadRequestException('ID is not a valid UUID');
-    }
+  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     if (!this.validateService.doesIdExists(id, db.tracks)) {
       throw new NotFoundException("Track with this id doesn't exist");
     }
