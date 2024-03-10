@@ -33,7 +33,6 @@ export class UserService {
     } as UserDto;
 
     this.users.push(newUser);
-    console.log(db.users);
     return { ...newUser, password: undefined } as UserDto;
   }
 
@@ -43,15 +42,13 @@ export class UserService {
 
   findOne(id: string) {
     const validId = this.validateUserId(id);
-    return this.users.find(user => user.id === `${validId}`);
+    return this.users.find(user => user.id === validId);
   }
 
   updatePassword(id: string, updateUserDto: UpdatePasswordDto) {
     const validId = this.validateUserId(id);
     const chosenUser = this.users.find(user => user.id === validId);
-    if (
-      chosenUser.password === (updateUserDto as UpdatePasswordDto).oldPassword
-    ) {
+    if (chosenUser.password === updateUserDto.oldPassword) {
       chosenUser.version += 1;
       chosenUser.updatedAt = new Date().getTime();
       this.users = this.users.filter(user => user.id !== validId);

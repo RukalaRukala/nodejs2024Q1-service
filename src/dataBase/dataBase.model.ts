@@ -41,3 +41,5 @@ export interface IDataBase {
   album: IAlbum[];
   favorites: IFavorites;
 }
+
+export type IDataBaseFields = IUser[] | IAlbum[] | ITrack[] | IArtist[];

@@ -1,34 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { ITrack } from '../../dataBase/dataBase.model';
 import { db } from '../../dataBase/db';
+import { v4 as uuidv4 } from 'uuid';
+import { TrackDto } from './dto/track.dto';
 
 @Injectable()
 export class TrackService {
-  private readonly tracks: ITrack[];
-
-  constructor() {
-    this.tracks = db.tracks;
-  }
-
   create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+    const newTrack = {
+      id: uuidv4(),
+      name: createTrackDto.name,
+      artistId: createTrackDto.artistId || null,
+      albumId: createTrackDto.albumId || null,
+      duration: createTrackDto.duration,
+    } as TrackDto;
+
+    db.tracks.push(newTrack);
+    return newTrack;
   }
 
   findAll() {
-    return this.tracks;
+    return db.tracks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  findOne(id: string) {
+    return db.tracks.find(user => user.id === id);
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    const chosenTrack = db.tracks.find(user => user.id === id);
+    return {
+      id: chosenTrack.id,
+      name: updateTrackDto.name,
+      artistId: updateTrackDto.artistId || chosenTrack.artistId,
+      albumId: updateTrackDto.artistId || chosenTrack.albumId,
+      duration: updateTrackDto.duration,
+    } as UpdateTrackDto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  remove(id: string) {
+    db.tracks = db.tracks.filter(track => track.id !== id);
   }
 }
