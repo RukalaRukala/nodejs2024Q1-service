@@ -34,7 +34,7 @@ export class TrackService {
       id: chosenTrack.id,
       name: updateTrackDto.name,
       artistId: updateTrackDto.artistId || chosenTrack.artistId,
-      albumId: updateTrackDto.artistId || chosenTrack.albumId,
+      albumId: updateTrackDto.albumId || chosenTrack.albumId,
       duration: updateTrackDto.duration,
     } as UpdateTrackDto;
   }

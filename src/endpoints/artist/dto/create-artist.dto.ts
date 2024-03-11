@@ -3,11 +3,11 @@ import { ArtistDto } from './artist.dto';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateArtistDto extends OmitType(ArtistDto, ['id']) {
-  @IsNotEmpty({ message: 'Name is required and should not be null' })
-  @IsString({ message: 'Name should be a string' })
+  @IsNotEmpty({ message: '<<name>> is required and should not be null' })
+  @IsString({ message: '<<name>> should be a string' })
   name: string;
 
-  @IsNotEmpty({ message: 'Grammy is required and should not be null' })
-  @IsBoolean({ message: 'Grammy should be a boolean' })
+  @IsNotEmpty({ message: '<<grammy>> is required and should not be null' })
+  @IsBoolean({ message: '<<grammy>> should be a boolean' })
   grammy: boolean;
 }

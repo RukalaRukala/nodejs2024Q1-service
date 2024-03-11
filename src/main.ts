@@ -5,6 +5,7 @@ import { startServerMessage } from './startServerMessage/startServerMessage';
 import { SwaggerModule } from '@nestjs/swagger';
 import { parse } from 'yaml';
 import { readFile } from 'fs/promises';
+import { ValidationPipe } from '@nestjs/common';
 config();
 
 async function bootstrap() {
@@ -13,6 +14,15 @@ async function bootstrap() {
   const file = await readFile('doc/api.yaml', 'utf-8');
   const swaggerDocument = parse(file);
   SwaggerModule.setup('doc', app, swaggerDocument);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      disableErrorMessages: false,
+    })
+  );
 
   await app.listen(process.env.PORT || 4000, startServerMessage);
 }

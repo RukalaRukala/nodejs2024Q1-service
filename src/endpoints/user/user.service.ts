@@ -20,7 +20,7 @@ export class UserService {
     } as UserDto;
 
     db.users.push(newUser);
-    return { ...newUser, password: undefined };
+    return { ...newUser, password: undefined } as UserDto;
   }
 
   findAll() {
@@ -32,7 +32,10 @@ export class UserService {
   }
 
   findOne(id: string) {
-    return { ...db.users.find(user => user.id === id), password: undefined };
+    return {
+      ...db.users.find(user => user.id === id),
+      password: undefined,
+    } as UserDto;
   }
 
   updatePassword(id: string, updateUserDto: UpdatePasswordDto) {
@@ -48,7 +51,7 @@ export class UserService {
       return {
         ...db.users.find(user => user.id === id),
         password: undefined,
-      };
+      } as UserDto;
     }
     throw new ForbiddenException('Old password is wrong');
   }

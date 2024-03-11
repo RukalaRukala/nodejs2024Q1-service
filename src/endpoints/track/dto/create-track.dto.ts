@@ -1,21 +1,30 @@
 import { OmitType } from '@nestjs/mapped-types';
 import { TrackDto } from './track.dto';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateTrackDto extends OmitType(TrackDto, ['id']) {
-  @IsNotEmpty({ message: 'Name is required and should not be null' })
-  @IsString({ message: 'Name should be a string' })
+  @IsNotEmpty({ message: '<<name>> is required and should not be null' })
+  @IsString({ message: '<<name>> should be a string' })
   name: string;
 
   @IsOptional({ message: 'Optional' })
-  @IsString({ message: 'ArtistId should be a string' })
+  @IsUUID('4', { message: '<<artistId>> must be a valid UUID version 4' })
   artistId: string | null;
 
   @IsOptional({ message: 'Optional' })
-  @IsString({ message: 'AlbumId should be a string' })
+  @IsUUID('4', { message: '<<albumId>> must be a valid UUID version 4' })
   albumId: string | null;
 
-  @IsNotEmpty({ message: 'Duration is required and should not be null' })
-  @IsNumber({}, { message: 'Duration should be a number (amount of seconds)' })
+  @IsNotEmpty({ message: '<<duration>> is required and should not be null' })
+  @IsNumber(
+    {},
+    { message: '<<duration>> should be a number (amount of seconds)' }
+  )
   duration: number;
 }
