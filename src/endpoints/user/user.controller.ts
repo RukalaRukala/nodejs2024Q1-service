@@ -10,12 +10,25 @@ import {
   NotFoundException,
   HttpException,
   HttpStatus,
+  // createParamDecorator,
+  // HostParam,
+  // ExecutionContext,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { db } from '../../dataBase/db';
 import { ValidateService } from '../../validate/validate.service';
+// import { ExistValidatePipe } from './pipes/exist-validate.pipe';
+
+// export const RouteAndId = createParamDecorator(
+//   (data: unknown, ctx: ExecutionContext) => {
+//     const request = ctx.switchToHttp().getRequest();
+//     const route = request.route;
+//     const id = request.params.id;
+//     return { route, id };
+//   }
+// );
 
 @Controller('user')
 export class UserController {
@@ -44,7 +57,10 @@ export class UserController {
 
   @Put(':id')
   update(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' }))
+    id: string,
+    // @RouteAndId(ExistValidatePipe)
+    // routeAndId: { router: unknown; id: string },
     @Body() updatePasswordDto: UpdatePasswordDto
   ) {
     if (!this.validateService.doesIdExists(id, db.users)) {
