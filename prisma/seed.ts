@@ -6,11 +6,11 @@ import {db} from "../src/dataBase/db";
 const prisma = new PrismaClient();
 
 async function main() {
-    // create two dummy articles
+    // create user
     const user = await prisma.user.create({
             data: {
                 id: uuidv4(),
-                login: 'SuperPupers',
+                login: 'Rukala',
                 password: '12345',
                 version: 1,
             }
