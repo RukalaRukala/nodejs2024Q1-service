@@ -1,0 +1,29 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/compose/compose-file/
+
+name: home-library-service
+
+services:
+  app:
+    build:
+      context: .
+#      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - 4000:4000
+
+  postgres:
+    image: postgres:16.2
+    restart: always
+    environment:
+      - POSTGRES_USER=Rukala
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres:
