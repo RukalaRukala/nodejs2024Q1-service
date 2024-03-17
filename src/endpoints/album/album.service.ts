@@ -1,4 +1,4 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateAlbumDto} from './dto/create-album.dto';
 import {v4 as uuidv4} from 'uuid';
 import {AlbumDto} from './dto/album.dto';
@@ -8,10 +8,8 @@ import {prisma} from "../../../prisma/seed";
 @Injectable()
 export class AlbumService {
     async create(createAlbum: CreateAlbumDto) {
+        await this.checkArtist(createAlbum);
         try {
-            if (createAlbum.artistId && !(await prisma.artist.findUnique({where: {id: createAlbum.artistId}}))) {
-                throw new ConflictException("An artist with that id doesn't exist");
-            }
             return await prisma.album.create({
                 data: {
                     id: uuidv4(),
@@ -27,7 +25,7 @@ export class AlbumService {
 
     async findAll() {
         try {
-            return await prisma.artist.findMany();
+            return await prisma.album.findMany();
         } catch (err) {
             throw err;
         }
@@ -43,10 +41,8 @@ export class AlbumService {
     }
 
     async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+        await this.checkArtist(updateAlbumDto);
         try {
-            if (updateAlbumDto.artistId && !(await prisma.artist.findUnique({where: {id: updateAlbumDto.artistId}}))) {
-                throw new ConflictException("An artist with that id doesn't exist");
-            }
             const chosenAlbum = await prisma.album.findUnique({where: {id}});
             await this.checkIdsExistence(id);
             return await prisma.album.update({
@@ -76,15 +72,22 @@ export class AlbumService {
             //     return track;
             // });
         } catch (err) {
+            console.log('привет')
             throw err;
         }
-
+        throw new HttpException('No content', HttpStatus.NO_CONTENT);
     }
 
     async checkIdsExistence(id: string) {
         const chosenAlbum = await prisma.album.findUnique({where: {id}});
         if (!chosenAlbum) {
-            throw new NotFoundException("Album with that id doesn't exist");
+            throw new NotFoundException("An album with that id doesn't exist");
+        }
+    }
+
+    async checkArtist(dto: CreateAlbumDto | UpdateAlbumDto) {
+        if (dto.artistId && !(await prisma.artist.findUnique({where: {id: dto.artistId}}))) {
+            throw new ConflictException("An artist with that id doesn't exist");
         }
     }
 }

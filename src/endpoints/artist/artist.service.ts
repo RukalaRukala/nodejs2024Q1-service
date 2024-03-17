@@ -8,10 +8,10 @@ import {prisma} from "../../../prisma/seed";
 @Injectable()
 export class ArtistService {
     async create(createArtist: CreateArtistDto) {
+        if (await prisma.artist.findUnique({where: {name: createArtist.name}})) {
+            throw new ConflictException('An artist with that name already exists');
+        }
         try {
-            if (await prisma.artist.findUnique({where: {name: createArtist.name}})) {
-                throw new ConflictException('An artist with that name already exists');
-            }
             return await prisma.artist.create({
                 data: {
                     id: uuidv4(),
@@ -80,10 +80,10 @@ export class ArtistService {
             //     }
             //     return album;
             // });
-            throw new HttpException('No content', HttpStatus.NO_CONTENT);
         } catch (err) {
             throw err;
         }
+        throw new HttpException('No content', HttpStatus.NO_CONTENT);
     }
 
     async checkIdsExistence(id: string) {

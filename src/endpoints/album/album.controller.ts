@@ -7,8 +7,6 @@ import {
     Delete,
     ParseUUIDPipe,
     Put,
-    HttpException,
-    HttpStatus,
 } from '@nestjs/common';
 import {AlbumService} from './album.service';
 import {CreateAlbumDto} from './dto/create-album.dto';
@@ -43,7 +41,6 @@ export class AlbumController {
 
     @Delete(':id')
     remove(@Param('id', new ParseUUIDPipe({version: '4'})) id: string) {
-        this.albumService.remove(id);
-        throw new HttpException('No content', HttpStatus.NO_CONTENT);
+        return this.albumService.remove(id);
     }
 }

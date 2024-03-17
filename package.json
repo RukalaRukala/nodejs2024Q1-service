@@ -22,7 +22,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "db:users": "ts-node dbQueries/users.ts",
     "db:artists": "ts-node dbQueries/artists.ts",
-    "db:albums": "ts-node dbQueries/albums.ts"
+    "db:albums": "ts-node dbQueries/albums.ts",
+    "db:tracks": "ts-node dbQueries/tracks.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
