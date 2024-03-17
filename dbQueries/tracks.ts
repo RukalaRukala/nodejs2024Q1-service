@@ -1,8 +1,8 @@
-import client from "./client.mjs";
+import client from "./client";
 
 client.connect();
 
-client.query(`Select * from "User"`, (err, res) => {
+client.query(`Select * from "Track"`, (err, res) => {
     !err
         ? console.log(res.rows)
         : console.log(err.message);

@@ -1,14 +1,15 @@
 import {PrismaClient} from '@prisma/client';
 import {v4 as uuidv4} from "uuid";
-import {db} from "../src/dataBase/db";
 
 // initialize Prisma Client
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 async function main() {
     // create user
-    const user = await prisma.user.create({
-            data: {
+    await prisma.user.upsert({
+            where: {login: 'Rukala'},
+            update: {},
+            create: {
                 id: uuidv4(),
                 login: 'Rukala',
                 password: '12345',
@@ -16,11 +17,20 @@ async function main() {
             }
         }
     );
-    const userFromDB = await prisma.user.findMany();
 
-    console.log({user, userFromDB}, '\n', db);
+    const existingFavorites = await prisma.favorites.findFirst();
+
+    if (!existingFavorites) {
+        await prisma.favorites.create({
+            data: {
+                id: uuidv4(),
+                artists: { create: [] },
+                albums: { create: [] },
+                tracks: { create: [] }
+            }
+        });
+    }
 }
-
 // execute the main function
 main()
     .catch((e) => {
