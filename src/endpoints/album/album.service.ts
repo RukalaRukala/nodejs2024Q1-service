@@ -1,51 +1,90 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { db } from '../../dataBase/db';
-import { v4 as uuidv4 } from 'uuid';
-import { AlbumDto } from './dto/album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {CreateAlbumDto} from './dto/create-album.dto';
+import {v4 as uuidv4} from 'uuid';
+import {AlbumDto} from './dto/album.dto';
+import {UpdateAlbumDto} from './dto/update-album.dto';
+import {prisma} from "../../../prisma/seed";
 
 @Injectable()
 export class AlbumService {
-  create(createAlbum: CreateAlbumDto) {
-    const newAlbum = {
-      id: uuidv4(),
-      name: createAlbum.name,
-      year: createAlbum.year,
-      artistId: createAlbum.artistId || null,
-    } as AlbumDto;
+    async create(createAlbum: CreateAlbumDto) {
+        try {
+            if (createAlbum.artistId && !(await prisma.artist.findUnique({where: {id: createAlbum.artistId}}))) {
+                throw new ConflictException("An artist with that id doesn't exist");
+            }
+            return await prisma.album.create({
+                data: {
+                    id: uuidv4(),
+                    name: createAlbum.name,
+                    year: createAlbum.year,
+                    artistId: createAlbum.artistId || null,
+                } as AlbumDto
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
 
-    db.albums.push(newAlbum);
-    return newAlbum;
-  }
+    async findAll() {
+        try {
+            return await prisma.artist.findMany();
+        } catch (err) {
+            throw err;
+        }
+    }
 
-  findAll() {
-    return db.albums;
-  }
+    async findOne(id: string) {
+        try {
+            await this.checkIdsExistence(id);
+            return await prisma.album.findUnique({where: {id}});
+        } catch (err) {
+            throw err;
+        }
+    }
 
-  findOne(id: string) {
-    return db.albums.find(album => album.id === id);
-  }
+    async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+        try {
+            if (updateAlbumDto.artistId && !(await prisma.artist.findUnique({where: {id: updateAlbumDto.artistId}}))) {
+                throw new ConflictException("An artist with that id doesn't exist");
+            }
+            const chosenAlbum = await prisma.album.findUnique({where: {id}});
+            await this.checkIdsExistence(id);
+            return await prisma.album.update({
+                where: {id},
+                data: {
+                    id: chosenAlbum.id,
+                    name: updateAlbumDto.name,
+                    year: updateAlbumDto.year,
+                    artistId: updateAlbumDto.artistId || chosenAlbum.artistId,
+                } as UpdateAlbumDto,
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const chosenAlbum = db.albums.find(album => album.id === id);
-    return {
-      id: chosenAlbum.id,
-      name: updateAlbumDto.name,
-      year: updateAlbumDto.year,
-      artistId: updateAlbumDto.artistId || chosenAlbum.artistId,
-    } as UpdateAlbumDto;
-  }
+    async remove(id: string) {
+        try {
+            await this.checkIdsExistence(id);
+            await prisma.album.delete({where: {id}});
+            // db.favorites.albums = db.favorites.albums.filter(album => album.id !== id);
+            //
+            // db.tracks = db.tracks.map(track => {
+            //     if (track.albumId === id) {
+            //         track.albumId = null;
+            //     }
+            //     return track;
+            // });
+        } catch (err) {
+            throw err;
+        }
 
-  remove(id: string) {
-    db.albums = db.albums.filter(album => album.id !== id);
-    db.favorites.albums = db.favorites.albums.filter(album => album.id !== id);
+    }
 
-    db.tracks = db.tracks.map(track => {
-      if (track.albumId === id) {
-        track.albumId = null;
-      }
-      return track;
-    });
-  }
+    async checkIdsExistence(id: string) {
+        const chosenAlbum = await prisma.album.findUnique({where: {id}});
+        if (!chosenAlbum) {
+            throw new NotFoundException("Album with that id doesn't exist");
+        }
+    }
 }

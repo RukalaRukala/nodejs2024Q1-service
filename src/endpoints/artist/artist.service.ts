@@ -30,11 +30,8 @@ export class ArtistService {
 
     async findOne(id: string) {
         try {
-            const artist = await prisma.artist.findUnique({where: {id}});
-            if (!artist) {
-                throw new NotFoundException("Artist with this id doesn't exist");
-            }
-            return artist
+            await this.checkIdsExistence(id);
+            return await prisma.artist.findUnique({where: {id}});
         } catch (err) {
             throw err;
         }
@@ -43,14 +40,15 @@ export class ArtistService {
     async update(id: string, updateArtistDto: UpdateArtistDto) {
         try {
             const chosenArtist = await prisma.artist.findUnique({where: {id}});
-            if (!chosenArtist) {
-                throw new NotFoundException("Artist with this id doesn't exist");
-            }
-            return {
-                id: chosenArtist.id,
-                name: updateArtistDto.name,
-                grammy: updateArtistDto.grammy,
-            } as UpdateArtistDto;
+            await this.checkIdsExistence(id);
+            return await prisma.artist.update({
+                where: {id},
+                data: {
+                    id: chosenArtist.id,
+                    name: updateArtistDto.name,
+                    grammy: updateArtistDto.grammy,
+                } as UpdateArtistDto,
+            });
         } catch (err) {
             throw err;
         }
@@ -58,10 +56,7 @@ export class ArtistService {
 
     async remove(id: string) {
         try {
-            const chosenArtist = await prisma.artist.findUnique({where: {id}});
-            if (!chosenArtist) {
-                throw new NotFoundException("Artist with this id doesn't exist");
-            }
+            await this.checkIdsExistence(id);
             await prisma.artist.delete({where: {id}});
             // const favs: IFavorites = await prisma.favorites.findFirst({
             //     include: {
@@ -88,6 +83,13 @@ export class ArtistService {
             throw new HttpException('No content', HttpStatus.NO_CONTENT);
         } catch (err) {
             throw err;
+        }
+    }
+
+    async checkIdsExistence(id: string) {
+        const chosenArtist = await prisma.artist.findUnique({where: {id}});
+        if (!chosenArtist) {
+            throw new NotFoundException("Artist with that id doesn't exist");
         }
     }
 }
