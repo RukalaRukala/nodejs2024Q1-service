@@ -23,7 +23,8 @@
     "db:users": "ts-node dbQueries/users.ts",
     "db:artists": "ts-node dbQueries/artists.ts",
     "db:albums": "ts-node dbQueries/albums.ts",
-    "db:tracks": "ts-node dbQueries/tracks.ts"
+    "db:tracks": "ts-node dbQueries/tracks.ts",
+    "db:favs": "ts-node dbQueries/favs.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

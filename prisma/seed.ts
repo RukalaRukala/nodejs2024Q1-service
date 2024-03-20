@@ -1,7 +1,6 @@
 import {PrismaClient} from '@prisma/client';
 import {v4 as uuidv4} from "uuid";
 
-// initialize Prisma Client
 export const prisma = new PrismaClient();
 
 async function main() {
@@ -23,15 +22,14 @@ async function main() {
     if (!existingFavorites) {
         await prisma.favorites.create({
             data: {
-                id: uuidv4(),
-                artists: { create: [] },
-                albums: { create: [] },
-                tracks: { create: [] }
+                tracks: {create: []},
+                artists: {create: []},
+                albums: {create: []},
             }
         });
     }
 }
-// execute the main function
+
 main()
     .catch((e) => {
         console.error(e);

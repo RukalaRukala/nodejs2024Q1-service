@@ -1,4 +1,4 @@
-import {ConflictException, HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateArtistDto} from './dto/create-artist.dto';
 import {v4 as uuidv4} from 'uuid';
 import {ArtistDto} from './dto/artist.dto';
@@ -8,9 +8,6 @@ import {prisma} from "../../../prisma/seed";
 @Injectable()
 export class ArtistService {
     async create(createArtist: CreateArtistDto) {
-        if (await prisma.artist.findUnique({where: {name: createArtist.name}})) {
-            throw new ConflictException('An artist with that name already exists');
-        }
         try {
             return await prisma.artist.create({
                 data: {
@@ -58,28 +55,6 @@ export class ArtistService {
         try {
             await this.checkIdsExistence(id);
             await prisma.artist.delete({where: {id}});
-            // const favs: IFavorites = await prisma.favorites.findFirst({
-            //     include: {
-            //         artists: true,
-            //         albums: true,
-            //         tracks: true,
-            //     },
-            // });
-            // const  updatedFavs: IFavorites = {...favs, artists: favs.artists.filter(artist => artist.id !== id)};
-            //
-            // db.tracks = db.tracks.map(track => {
-            //     if (track.artistId === id) {
-            //         track.artistId = null;
-            //     }
-            //     return track;
-            // });
-            //
-            // db.albums = db.albums.map(album => {
-            //     if (album.artistId === id) {
-            //         album.artistId = null;
-            //     }
-            //     return album;
-            // });
         } catch (err) {
             throw err;
         }

@@ -63,16 +63,7 @@ export class AlbumService {
         try {
             await this.checkIdsExistence(id);
             await prisma.album.delete({where: {id}});
-            // db.favorites.albums = db.favorites.albums.filter(album => album.id !== id);
-            //
-            // db.tracks = db.tracks.map(track => {
-            //     if (track.albumId === id) {
-            //         track.albumId = null;
-            //     }
-            //     return track;
-            // });
         } catch (err) {
-            console.log('привет')
             throw err;
         }
         throw new HttpException('No content', HttpStatus.NO_CONTENT);

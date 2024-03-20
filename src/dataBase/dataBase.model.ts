@@ -30,9 +30,9 @@ export interface IAlbum {
 
 export interface IFavorites {
   id: string;
-  artists: IArtist[]; // favorite artist ids
-  albums: IAlbum[]; // favorite album ids
-  tracks: ITrack[]; // favorite track ids
+  artists: IArtist[];
+  albums: IAlbum[];
+  tracks: ITrack[];
 }
 
 export interface IDataBase {
@@ -44,10 +44,3 @@ export interface IDataBase {
 }
 
 export type IDataBaseFields = IUser[] | IAlbum[] | ITrack[] | IArtist[];
-export type Favorite = IUser[] | IAlbum[] | ITrack[] | IArtist[];
-
-export enum DB_FIELD {
-  TRACKS = 'tracks',
-  ALBUMS = 'albums',
-  ARTISTS = 'artists',
-}

@@ -1,7 +1,6 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { db } from '../../dataBase/db';
 import { v4 as uuidv4 } from 'uuid';
 import { TrackDto } from './dto/track.dto';
 import {prisma} from "../../../prisma/seed";
@@ -38,7 +37,7 @@ export class TrackService {
   async findOne(id: string) {
     await this.checkIdsExistence(id);
     try {
-      return await prisma.album.findUnique({where: {id}});
+      return await prisma.track.findUnique({where: {id}});
     } catch (err) {
       throw err;
     }
@@ -65,9 +64,14 @@ export class TrackService {
     }
   }
 
-  remove(id: string) {
-    db.tracks = db.tracks.filter(track => track.id !== id);
-    db.favorites.tracks = db.favorites.tracks.filter(track => track.id !== id);
+  async remove(id: string) {
+    try {
+      await this.checkIdsExistence(id);
+      await prisma.track.delete({where: {id}});
+    } catch (err) {
+      throw err;
+    }
+    throw new HttpException('No content', HttpStatus.NO_CONTENT);
   }
 
   async checkIdsExistence(id: string) {
