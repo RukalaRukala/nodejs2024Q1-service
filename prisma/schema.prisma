@@ -24,13 +24,13 @@ model User {
 
 model Artist {
   id     String  @id @default(uuid())
-  name   String  @unique
+  name   String
   grammy Boolean @default(false)
 
   albums Album[]
   tracks Track[]
 
-  favorites   Favorites? @relation("FavoriteArtist", fields: [favoritesId], references: [id])
+  favorites   Favorites? @relation(fields: [favoritesId], references: [id])
   favoritesId String?
 }
 
@@ -44,7 +44,7 @@ model Album {
 
   tracks Track[]
 
-  favorites   Favorites? @relation("FavoriteAlbum", fields: [favoritesId], references: [id])
+  favorites   Favorites? @relation(fields: [favoritesId], references: [id])
   favoritesId String?
 }
 
@@ -59,13 +59,13 @@ model Track {
   album   Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull)
   albumId String?
 
-  favorites   Favorites? @relation("FavoriteTrack", fields: [favoritesId], references: [id])
+  favorites   Favorites? @relation(fields: [favoritesId], references: [id])
   favoritesId String?
 }
 
 model Favorites {
   id      String   @id @default(uuid())
-  artists Artist[] @relation("FavoriteArtist")
-  albums  Album[]  @relation("FavoriteAlbum")
-  tracks  Track[]  @relation("FavoriteTrack")
+  artists Artist[]
+  albums  Album[]
+  tracks  Track[]
 }
