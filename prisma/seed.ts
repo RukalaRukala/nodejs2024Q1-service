@@ -4,7 +4,6 @@ import {v4 as uuidv4} from "uuid";
 export const prisma = new PrismaClient();
 
 async function main() {
-    // create user
     await prisma.user.upsert({
             where: {login: 'Rukala'},
             update: {},
@@ -36,6 +35,5 @@ main()
         process.exit(1);
     })
     .finally(async () => {
-        // close Prisma Client at the end
         await prisma.$disconnect();
     });
