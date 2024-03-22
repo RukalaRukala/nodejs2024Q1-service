@@ -1,19 +1,13 @@
-FROM node:20.11-alpine
+FROM node:16-alpine
 
-ENV PORT=4000
-ENV CRYPT_SALT=10
-ENV JWT_SECRET_KEY=secret123123
-ENV JWT_SECRET_REFRESH_KEY=secret123123
-ENV TOKEN_EXPIRE_TIME=1h
-ENV TOKEN_REFRESH_EXPIRE_TIME=24h
-ENV DATABASE_URL="postgres://Rukala:password@localhost:5432/median-db"
+WORKDIR /home/app
+
+COPY package*.json .
+
+RUN npm ci && npm cache clean --force
 
 COPY . .
 
-WORKDIR .
+RUN npm install yaml
 
-RUN npm install
-
-ENV NODE_ENV=production
-
-EXPOSE 4000
+CMD npx prisma generate && npx prisma migrate dev --name init && npm start

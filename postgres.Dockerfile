@@ -1,6 +1,1 @@
-FROM postgres:16.2
-
-ENV POSTGRES_USER=Rukala
-ENV POSTGRES_PASSWORD=password
-
-EXPOSE 5432
+FROM postgres:16-alpine

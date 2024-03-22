@@ -38,3 +38,6 @@ npm run prisma:migrate
 ```
 npm run prisma:seed
 ```
+```
+docker exec home-library-service-app-1 npx prisma migrate dev --name init
+```

@@ -1,0 +1,48 @@
+name: home-library-service
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    restart: always
+    environment:
+      - POSTGRES_USER=Rukala
+      - POSTGRES_PASSWORD=password
+      - DATABASE_URL="postgres://Rukala:password@localhost:5432/median-db?schema=public"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - my-bridge
+    env_file:
+      - .env
+
+  app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    environment:
+      - DATABASE_URL="postgres://Rukala:password@postgres:5432/median-db?schema=public"
+    depends_on:
+      - postgres
+    volumes:
+      - type: bind
+        source: ./src
+        target: /home/app/src
+      - ./log:/home/app/logs
+    ports:
+      - 4000:4000
+    networks:
+      - my-bridge
+    env_file:
+      - .env
+    restart: always
+
+networks:
+  my-bridge:
+    driver: bridge
+
+volumes:
+  postgres:
