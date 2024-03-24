@@ -1,43 +1,22 @@
-# Проект Home Library Service
+# Project Home Library Service
 
 
-## Установка и запуск
+## Installation and launch
 
-1. Склонируйте репозиторий:
-
-    ```
-    git clone https://github.com/username/xyz.git
-    ```
-
-2. Перейдите в каталог проекта:
+1. Clone the repository:
 
     ```
-    cd xyz
+    git clone https://github.com/RukalaRukala/nodejs2024Q1-service.git
     ```
 
-3. Запустите Docker-контейнер:
+2. Go to the next branch of the repository:
 
     ```
-    docker-compose up -d
+    git branch rest-service-containerization-docker-database-orm
     ```
 
-## Настройка
+3. Build and run a Docker container:
 
-- Переменная окружения `XYZ_API_KEY` используется для настройки API-ключа.
-
-## Использование
-
-Для получения списка пользователей, выполните следующую команду:
-
-```
-docker-compose up --build -d
-```
-```
-npm run prisma:migrate
-```
-```
-npm run prisma:seed
-```
-```
-docker exec home-library-service-app-1 npx prisma migrate dev --name init
-```
+   ```
+   docker-compose up --build -d
+   ```
