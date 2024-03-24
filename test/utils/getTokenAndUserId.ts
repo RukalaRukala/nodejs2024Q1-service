@@ -5,7 +5,7 @@ const createUserDto = {
   password: 'Tu6!@#%&',
 };
 
-const getTokenAndUserId = async (request) => {
+const getTokenAndUserId = async request => {
   // create user
   const {
     body: { id: mockUserId },

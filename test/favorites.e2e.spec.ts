@@ -177,13 +177,13 @@ describe('Favorites (e2e)', () => {
       expect(responseAfterDeletion.status).toBe(StatusCodes.OK);
 
       const artistSearchRes = responseAfterDeletion.body.artists.find(
-        (artist) => artist.id === artistId,
+        artist => artist.id === artistId
       );
       const albumSearchRes = responseAfterDeletion.body.albums.find(
-        (album) => album.id === albumId,
+        album => album.id === albumId
       );
       const trackSearchRes = responseAfterDeletion.body.tracks.find(
-        (track) => track.id === trackId,
+        track => track.id === trackId
       );
 
       expect(artistSearchRes).toBeUndefined();
@@ -348,7 +348,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(deleteAlbumFromFavoritesResponse.status).toBe(
-        StatusCodes.NO_CONTENT,
+        StatusCodes.NO_CONTENT
       );
 
       const response = await unauthorizedRequest
@@ -358,7 +358,7 @@ describe('Favorites (e2e)', () => {
       expect(response.status).toBe(StatusCodes.OK);
 
       const albumSearchResult = response.body.albums.find(
-        (album) => album.id === albumId,
+        album => album.id === albumId
       );
 
       expect(albumSearchResult).toBeUndefined();
@@ -392,7 +392,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(deleteArtistFromFavoritesResponse.status).toBe(
-        StatusCodes.NO_CONTENT,
+        StatusCodes.NO_CONTENT
       );
 
       const response = await unauthorizedRequest
@@ -402,7 +402,7 @@ describe('Favorites (e2e)', () => {
       expect(response.status).toBe(StatusCodes.OK);
 
       const artistSearchResult = response.body.artists.find(
-        (artist) => artist.id === artistId,
+        artist => artist.id === artistId
       );
 
       expect(artistSearchResult).toBeUndefined();
@@ -436,7 +436,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(deleteTrackFromFavoritesResponse.status).toBe(
-        StatusCodes.NO_CONTENT,
+        StatusCodes.NO_CONTENT
       );
 
       const response = await unauthorizedRequest
@@ -446,7 +446,7 @@ describe('Favorites (e2e)', () => {
       expect(response.status).toBe(StatusCodes.OK);
 
       const trackSearchResult = response.body.tracks.find(
-        (track) => track.id === trackId,
+        track => track.id === trackId
       );
 
       expect(trackSearchResult).toBeUndefined();
@@ -472,7 +472,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(albumsDeletionFromFavoritesResponse.status).toBe(
-        StatusCodes.NOT_FOUND,
+        StatusCodes.NOT_FOUND
       );
 
       const artistsDeletionFromFavoritesResponse = await unauthorizedRequest
@@ -480,7 +480,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(artistsDeletionFromFavoritesResponse.status).toBe(
-        StatusCodes.NOT_FOUND,
+        StatusCodes.NOT_FOUND
       );
 
       const tracksDeletionFromFavoritesResponse = await unauthorizedRequest
@@ -488,7 +488,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(tracksDeletionFromFavoritesResponse.status).toBe(
-        StatusCodes.NOT_FOUND,
+        StatusCodes.NOT_FOUND
       );
     });
   });
