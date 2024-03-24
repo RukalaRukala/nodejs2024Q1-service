@@ -1,13 +1,11 @@
 FROM node:16-alpine
 
-WORKDIR /home/app
+WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm ci && npm cache clean --force
 
 COPY . .
 
-RUN npm install yaml
-
-CMD npx prisma generate && npx prisma migrate deploy && npm start
+CMD npm install yaml && npx prisma generate && npx prisma migrate deploy && npm start

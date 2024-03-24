@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://Rukala:password@postgres:5432/median-db?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 model User {
