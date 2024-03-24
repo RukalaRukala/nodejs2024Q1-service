@@ -10,4 +10,4 @@ COPY . .
 
 RUN npm install yaml
 
-CMD npx prisma generate && npx prisma migrate dev --name init && npm start
+CMD npx prisma generate && npx prisma migrate deploy && npm start
