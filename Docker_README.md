@@ -24,7 +24,7 @@
 4. Build and run a Docker container:
 
    ```
-   docker-compose up --build -d
+   docker-compose up -d
    ```
    
 5. Scan vulnerabilities:
