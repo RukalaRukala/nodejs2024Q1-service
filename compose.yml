@@ -1,0 +1,52 @@
+name: home-library-service
+
+services:
+  app:
+    image: rukalarukala/home-library-service-app:latest
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      postgres:
+        condition: service_started
+    volumes:
+      - type: bind
+        source: ./src
+        target: /app/src
+      - ./log:/app/logs
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - my-bridge
+    restart: always
+
+  postgres:
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_URL_P: ${DATABASE_URL_P}
+    volumes:
+      - data:/var/lib/postgresql/data
+      - logs:/var/log/postgresql
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - my-bridge
+
+networks:
+  my-bridge:
+    driver: bridge
+
+volumes:
+  data:
+  logs:

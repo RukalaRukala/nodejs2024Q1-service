@@ -6,6 +6,7 @@ export const db: IDataBase = {
   albums: [],
   tracks: [],
   favorites: {
+    id:'test',
     artists: [],
     tracks: [],
     albums: [],
