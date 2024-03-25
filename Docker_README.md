@@ -12,7 +12,7 @@
 2. Go to the next branch of the repository:
 
     ```
-    git branch rest-service-containerization-docker-database-orm
+    git checkout rest-service-containerization-docker-database-orm
     ```
    
 3. Download the image from DockerHub:
@@ -36,5 +36,5 @@
 6. Run tests:
 
    ```
-   npm run test
+   docker exec -it home-library-service-app-1 sh -c "npm run test"
    ```
