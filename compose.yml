@@ -2,6 +2,7 @@ name: home-library-service
 
 services:
   app:
+    image: rukalarukala/home-library-service-app:latest
     build:
       context: .
       dockerfile: app.Dockerfile

@@ -14,9 +14,27 @@
     ```
     git branch rest-service-containerization-docker-database-orm
     ```
+   
+3. Download the image from DockerHub:
 
-3. Build and run a Docker container:
+   ```
+   docker pull rukalarukala/home-library-service-app:latest
+   ```
+   
+4. Build and run a Docker container:
 
    ```
    docker-compose up --build -d
+   ```
+   
+5. Scan vulnerabilities:
+
+   ```
+   npm run docker:scan
+   ```
+   
+6. Run tests:
+
+   ```
+   npm run test
    ```
